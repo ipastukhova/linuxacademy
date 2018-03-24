@@ -1,36 +1,40 @@
 INSTALLING DOCKER
 =================
 //  install prereq for docker-ce
-sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+yum install -y yum-utils device-mapper-persistent-data lvm2
 
 // add the Docker CE repository
-sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
 // install docker-ce
-sudo yum install docker-ce
+yum install docker-ce
 
 //verify that the 'docker' group exists
 cat /etc/group | grep docker
 
 //add the permissions to the user to run docker without sudo
-sudo usermod -aG docker user
+usermod -aG docker user
 
 //remove previous versions of docker
-sudo apt-get purge -y docker-engine && sudo apt-get autoremove --purge -y docker-engine &&
-sudo rm -rf /var/lib/docker
+apt-get purge -y docker-engine && apt-get autoremove --purge -y docker-engine &&
+rm -rf /var/lib/docker
 
+
+DOCKER DAEMON
+=============
+systemctl stop/start/restart docker
 
 
 IMAGES
 ======
 //pull an image from repo
+docker pull image_name
 
 //list images
-sudo docker images
+docker images
 
 //tag the 'ubuntu:latest' image to refer to it with a shorter name
-sudo docker tag ubuntu:latest my:ubuntu
-
+docker tag ubuntu:latest my:ubuntu
 
 
 CONTAINERS
@@ -41,8 +45,17 @@ docker run -it centos:6 /bin/bash
 // list all stopped (-a) containers
 docker ps -a
 
+//create (not run) a container called "my_container", create it with parameters that will allow it to run interactively and attached to the local console running the bash shell.
+docker create -it --name="my-container" ubuntu:latest /bin/bash
+
 //using the name or ID of the container, commit the changes we made within it to a new base image
 docker commit b237d65fd197 newname
+
+//using json formatting find the IPaddress of the container
+docker container inspect --format="{{.NetworkSettings.Networks.bridge.IPAddress}}" container_name
+
+//start a container
+docker start my-container
 
 //stop a container
 docker stop container_name
@@ -50,18 +63,11 @@ docker stop container_name
 //remove a container
 docker rm container_name
 
-//Create (not run) a container called "my_container", create it with parameters that will allow it to run interactively and attached to the local console running the bash shell.
-sudo docker create -it --name="my-container" ubuntu:latest /bin/bash
-
-
-//start a container
-sudo docker start my-container
-
 
 DOCKER SERVICES
 ===============
 //start service
-sudo service docker start
+service docker start
 
 //stop service
-sudo service docker stop
+service docker stop
