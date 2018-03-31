@@ -71,3 +71,39 @@ service docker start
 
 //stop service
 service docker stop
+
+
+SWARM
+=====
+//initialize the swarm cluster
+docker swarm init --advertise-addr 172.31.118.114
+
+//retrieve the token for a worker to be added to the swarm
+docker swarm join-token worker
+
+//retrieve the token for a manager to be added to the swarm
+docker swarm join-token manager
+
+//join a swarm
+docker swarm join --token SWMTKN-1-1anvcitaky0o7sp39qhzraucmcjm0wm2828tbzdr7wa0pauz5d-08pkm4jd4pbp1oyfbolxy0bav     172.31.118.144:2377
+
+//display all of the nodes within your cluster
+docker node ls
+
+//display ALL information about the system that Docker can see along with the details of the cluster name, management nodes and nodes joined
+docker info
+
+//create a service in the swarm cluster
+docker service create --name service_name -p 80:80 --replicas 3 httpd
+
+//display services that are currently running
+docker service ls
+
+//get the node the service is currently running on
+docker service ps service_name
+
+//scale up services
+docker service scale service_name=3
+
+//leave the swarm
+docker swarm leave
