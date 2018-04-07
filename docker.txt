@@ -107,3 +107,18 @@ docker service scale service_name=3
 
 //leave the swarm
 docker swarm leave
+
+
+VOLUMES
+=======
+//create a storage volume
+docker volume create test-volume
+
+//display all the Docker storage volumes
+docker volume ls
+
+//display all the attributes of 'test-volume'
+docker volume inspect test-volume
+
+//remove the newly created 'test-volume'
+docker volume rm test-volume
