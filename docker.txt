@@ -48,6 +48,9 @@ docker ps -a
 //create (not run) a container called "my_container", create it with parameters that will allow it to run interactively and attached to the local console running the bash shell.
 docker create -it --name="my-container" ubuntu:latest /bin/bash
 
+//create an interactive container, that will be attached to Terminal and use Google Public DNS, and use Domain Search "mydomain.local"
+docker container run -it --name mycontainer --dns 8.8.8.8 --dns-search "mydomain.local" ubuntu
+
 //using the name or ID of the container, commit the changes we made within it to a new base image
 docker commit b237d65fd197 newname
 
@@ -62,6 +65,9 @@ docker stop container_name
 
 //remove a container
 docker rm container_name
+
+//remove all containers
+docker rm `docker ps -a -q`
 
 
 DOCKER SERVICES
