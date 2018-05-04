@@ -1,0 +1,23 @@
+CONFIGURE THE FIRST CLUSTER
+===========================
+//pass in a flag to the deployment script so K8s knows how to configure itself
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+
+//take note of the token for other nodes to be join:
+kubeadm join --token --discovery-token-ca-cert-hash sha256:
+kubeadm join 172.31.103.255:6443 --token s7s0e5.r5cjb997rmhq0ju6 --discovery-token-ca-cert-hash sha256:d9c4dd31f89d3b289ad822ee95893e493fe43fa062f53cb15f5986130ece2260
+
+mkdir -p $HOME/.kube
+//move the configuration files to a location usable by your local user
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+//install pod networking
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+//see pods list
+kubectl get pods --all-namespaces
+//see nginx pods
+kubectl get pods -l app=nginx
+//see pods with nodes they are running on
+kubectl get pods -o wide
