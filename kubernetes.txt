@@ -21,3 +21,35 @@ kubectl get pods --all-namespaces
 kubectl get pods -l app=nginx
 //see pods with nodes they are running on
 kubectl get pods -o wide
+
+
+
+KUBERNETES YAML
+===============
+apiVErsion: v1
+kind: Pod
+metadata:
+  name: busybox
+spec:
+containers:
+  -name: busybox
+   image: busybox
+   command:
+    - sleep
+    - "3600"
+
+RUN A JOB
+=========
+//run a job from a yaml file
+kubectl create -f sample-job.yaml
+
+//check the status of the job
+kubectl describe jobname
+
+//look at the log of the executed command
+kubectl logs podname
+
+//delete the pod
+kubectl delete -f filename.yaml
+kubectl delete pod podname
+kubectl delete pod/podname
