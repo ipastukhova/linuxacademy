@@ -23,7 +23,6 @@ kubectl get pods -l app=nginx
 kubectl get pods -o wide
 
 
-
 KUBERNETES YAML
 ===============
 apiVErsion: v1
@@ -37,6 +36,7 @@ containers:
    command:
     - sleep
     - "3600"
+
 
 RUN A JOB
 =========
@@ -53,3 +53,56 @@ kubectl logs podname
 kubectl delete -f filename.yaml
 kubectl delete pod podname
 kubectl delete pod/podname
+
+
+NODES
+=====
+//see nodes list and the current status of all nodes
+kubtctl get nodes
+
+//see what pods are running on the cluster/node
+kubectl describe node node-name
+
+//list all pods and which nodes they are currently running on
+kubectl get pods --all-namespaces -o wide
+
+//see what pods are running in the kube-system namespace
+kubectl get pods -n kube-system
+
+//get all pods, even the ones that shut down
+kubectl get pods --show-all
+
+
+DEPLOYMENTS
+===========
+//deployments list
+kubectl get deployments
+
+//deployment status
+kubectl describe deployment deployment-name
+kubectl get pods name-of-pods -o wide
+kubectl get pods -l app=nginx -o wide
+
+//get the full yaml - restore the initial yaml file
+kubectl get deployment nginx-deployment -o yaml
+
+//update the deployment to use the 1.8 version of the nginx container and roll it out
+kubectl set image deployment/nginx-deployment nginx=nginx:1.8
+
+//deployment status
+kubectl rollout status deployment nginx-deployment
+
+//undo deployment
+kubectl rollout undo deployment/nginx-deployment --to-revision=1
+
+//apply changes made in the yaml file
+kubectl apply -f nginx-deployment.yaml
+
+//view the deployment history
+kubectl rollout history deployment nginx-deployment
+
+//roll back to a specific state
+kubectl rollout history deployment nginx-deployment --revision=x
+
+//scale replicas
+kubectl scale deployment/nginx-deployment --replicas=3
