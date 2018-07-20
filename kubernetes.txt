@@ -132,3 +132,61 @@ kubectl label pods --all -n default tier=linuxAcademyCloud
 
 //list all pods in the default namespace with the key/value pair running=afterLabels and tier=linuxAcademyCloud
 kubectl get pods -l running=afterLabels -l tier=linuxAcademyCloud
+
+
+DAEMON SETS
+===========
+kubectl get daemonsets -n kube-system
+
+
+SCHEDULING
+==========
+//yaml file for a pod to be launched on a particular node
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  namespace: default
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command:
+      - sleep
+      - "300"
+    imagePullPolicy: IfNotPresent
+  restartPolicy: Always
+  nodeSelector:
+    mylabel: here
+
+
+LOGS
+====
+//view the current logs of the pod (interactively, last 15 lines)
+kubectl logs podname (-f --tail=15)
+
+//view logs through symlinks in the directory:
+var/logs/containers
+
+//Metrics API (such as container CPU and memory usage)
+kubectl top
+
+
+UPGRADE
+=======
+apt upgrade kubeadm
+kubeadm version
+kubeadm upgrade plan
+kubeadm upgrade apply v1.9.1
+kubelet update
+
+//evict running pods from the node
+kubectl drain nodename --ignore-daemonsets
+
+//after evicting we'll need to turn the scheduler back on
+kubectl uncordon nodename
+
+//generate a token to join a cluster
+kubeadm token generate
+kubeadm token create tokennumber --ttl 3h --print-join-command
