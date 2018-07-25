@@ -190,3 +190,25 @@ kubectl uncordon nodename
 //generate a token to join a cluster
 kubeadm token generate
 kubeadm token create tokennumber --ttl 3h --print-join-command
+
+
+
+SERVICE NETWORKING
+==================
+kubectl expose deployment webhead --type="NodePort" --port 80
+kubectl get services
+
+
+kubectl get endpoints ...
+
+Cluster DNS
+===========
+
+//check to see whether or not your deployment is currently being resolved in the cluster via your busybox container
+kubectl exec -it busybox -- nslookup deploymentname
+
+//expose your deployment as a ClusterIP service.
+kubectl expose deployment deploymentname --type=ClusterIP --port 80
+
+//verify that your deployment is now being resolved to an IP address in your cluster
+kubectl exec -it busybox -- nslookup bit-of-nothing should return an IP address after a few moments.
